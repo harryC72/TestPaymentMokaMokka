@@ -6,11 +6,21 @@ using System.Threading.Tasks;
 using Braintree;
 using Microsoft.AspNetCore.Mvc;
 using TestPaymentMokaMokka.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace TestPaymentMokaMokka.Controllers
 {
     public class PaymentController : Controller
     {
+        public IConfiguration Configuration { get; set; }
+
+
+        public PaymentController(IConfiguration config)
+        {
+            Configuration = config;
+        }
+
+
         public ActionResult Pay()
         {
             var gateway = GetGetAway();
@@ -26,9 +36,9 @@ namespace TestPaymentMokaMokka.Controllers
             return new BraintreeGateway
             {
                 Environment = Braintree.Environment.SANDBOX,
-                MerchantId = "n5zjdmhggwz5nzbq",
-                PublicKey = "h6pkqbvb2h6wxt2w",
-                PrivateKey = "05c6fbe8e69b6afbb1720b1941a3e4f4"
+                MerchantId = Configuration["Braintree:MerchantId"],
+                PublicKey = Configuration["Braintree:PublicKey"],
+                PrivateKey =Configuration["Braintree:PrivateKey"]
             };
         }
 
